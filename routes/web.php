@@ -13,6 +13,9 @@ Route::get('/', function () {
 });
 
 Route::get('/clientes', [ClienteController::class, 'index'])->name('clientes.index')->middleware(['auth']);
+Route::get('/clientes/edit',[ClienteController::class,'edit'])->name('clientes.edit');
+Route::get('/clientes/create',[ClienteController::class,'create'])->name('clientes.create');
+Route::post('/clientes', [ClienteController::class, 'store'])->name('clientes.store');
 Route::get('/pedido', [PedidoController::class, 'index'])->name('pedido.index')->middleware(['auth']);
 Route::get('/fornecedores', [FornecedorController::class, 'index'])->name('fornecedores.index')->middleware(['auth']);
 Route::get('/estoque', [EstoqueController::class, 'index'])->name('estoque.index')->middleware(['auth']);

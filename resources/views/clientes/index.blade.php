@@ -119,11 +119,22 @@
 
     <div class="py-10 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
 
+        @if (session('sucess'))
+        <div class="mb-6 p-4 bg-green-100 border-1-4 border-green-500 text-green-700 shadow-sm rounded-r">
+            {{ session('sucess') }}
+</div>
+@endif
+
+<div class="bg-white overflow-hidden shadow-sm sm:roundded-lg p-6">
+    <div class=" grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div class="page-header">
             <div>
                 <div class="page-subtitle">Cadastro</div>
                 <div class="page-title">Clientes Registrados</div>
+
             </div>
+            <a href="{{ route('clientes.create') }}" >
+        </a>
         </div>
 
         <div class="table-wrap">

@@ -213,12 +213,22 @@
                         Dashboard
                     </a>
                     {{-- Adicione mais links de nav aqui --}}
-                    {{-- Exemplo:
                     <a href="{{ route('clientes.index') }}"
                        class="nav-link {{ request()->routeIs('clientes.*') ? 'active' : '' }}">
                         Clientes
+                        <a href="{{ route('estoque.index') }}"
+                       class="nav-link {{ request()->routeIs('estoque.*') ? 'active' : '' }}">
+                        Estoque
+                        <a href="{{ route('produtos.index') }}"
+                       class="nav-link {{ request()->routeIs('produtos.*') ? 'active' : '' }}">
+                        Produtos
+                        <a href="{{ route('fornecedores.index') }}"
+                       class="nav-link {{ request()->routeIs('fornecedores.*') ? 'active' : '' }}">
+                        Fornecedores
+                        <a href="{{ route('pedido.index') }}"
+                       class="nav-link {{ request()->routeIs('pedido.*') ? 'active' : '' }}">
+                        Pedidos
                     </a>
-                    --}}
                 </div>
             </div>
 

@@ -124,7 +124,7 @@
     <div class="py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
 
         {{-- Mensagem de Sucesso --}}
-        @if (session('success') || session('sucess')) {{-- Tratando o erro de digitação 'sucess' --}}
+        @if (session('success') || session('sucess')) 
             <div class="mb-6 p-4 bg-green-100 border-l-4 border-green-500 text-green-800 rounded shadow-sm">
                 {{ session('success') ?? session('sucess') }}
             </div>
@@ -164,12 +164,12 @@
                                         Editar
                                     </a>
 
-                                    {{-- Formulário de Exclusão --}}
-                                    <form action="{{ route('clientes.destroy', $cliente->id) }}" method="POST" onsubmit="return confirm('Tem certeza que deseja excluir este cliente?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-delete">Excluir</button>
-                                    </form>
+                                    {{-- Gatilho para o Modal Genérico --}}
+                                    <button type="button" 
+                                            class="btn-delete" 
+                                            onclick="openDeleteModal('{{ route('clientes.destroy', $cliente->id) }}', '{{ $cliente->nome }}')">
+                                        Excluir
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -187,4 +187,7 @@
             </table>
         </div>
     </div>
+
+    {{-- Componente Modal --}}
+    <x-modal-delete />
 </x-app-layout>

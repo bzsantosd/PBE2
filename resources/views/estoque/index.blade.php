@@ -210,11 +210,12 @@
                                 <div class="action-cell" style="justify-content: flex-end;">
                                     <a href="{{ route('estoque.edit', $item->id) }}" class="btn-edit">Editar</a>
                                     
-                                    <form action="{{ route('estoque.destroy', $item->id) }}" method="POST" onsubmit="return confirm('Excluir este item permanentemente?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-delete">Excluir</button>
-                                    </form>
+                                    {{-- CHAMADA DO COMPONENTE GENÉRICO --}}
+                                    <button type="button" 
+                                            class="btn-delete" 
+                                            onclick="openDeleteModal('{{ route('estoque.destroy', $item->id) }}', '{{ $item->descricao }}')">
+                                        Excluir
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -233,4 +234,7 @@
             </table>
         </div>
     </div>
+
+    {{-- Incluindo o componente aqui no final do layout da página --}}
+    <x-modal-delete />
 </x-app-layout>

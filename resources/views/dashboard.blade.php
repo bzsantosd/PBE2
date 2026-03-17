@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
+        <h2 class="font-semibold text-xl text-gray-800 leading-tight dash-header">
+            {{ __('Dashboard Operacional') }}
         </h2>
     </x-slot>
 
@@ -26,9 +26,7 @@
             color: var(--ink);
         }
 
-        .dash-header {
-            font-family: 'Syne', sans-serif;
-        }
+        .dash-header { font-family: 'Syne', sans-serif; }
 
         .kpi-grid {
             display: grid;
@@ -60,7 +58,6 @@
         }
 
         .kpi-label {
-            font-family: 'DM Sans', sans-serif;
             font-size: 0.72rem;
             font-weight: 500;
             letter-spacing: 0.08em;
@@ -118,7 +115,6 @@
 
         .status-ok { background: var(--success); }
         .status-alert { background: var(--accent); }
-        .status-warn { background: var(--warning); }
 
         .welcome-banner {
             background: var(--ink);
@@ -149,11 +145,6 @@
             margin-bottom: 0.25rem;
         }
 
-        .welcome-banner p {
-            font-size: 0.88rem;
-            opacity: 0.6;
-        }
-
         .nav-shortcut {
             display: flex;
             align-items: center;
@@ -175,10 +166,6 @@
             border-color: var(--accent);
         }
 
-        .nav-shortcut:hover .shortcut-icon {
-            background: rgba(255,255,255,0.2);
-        }
-
         .shortcut-icon {
             width: 32px;
             height: 32px;
@@ -189,7 +176,6 @@
             justify-content: center;
             font-size: 1rem;
             flex-shrink: 0;
-            transition: background 0.15s ease;
         }
     </style>
 
@@ -197,8 +183,8 @@
 
         {{-- Welcome Banner --}}
         <div class="welcome-banner">
-            <h1>Bem-vindo ao Sistema de Confecção</h1>
-            <p>Gerencie clientes, pedidos, estoque e fornecedores em um só lugar.</p>
+            <h1>Olá, {{ Auth::user()->name }}!</h1>
+            <p>Painel de controle do Sistema de Confecção.</p>
         </div>
 
         {{-- KPI Cards --}}
@@ -206,22 +192,22 @@
             <div class="kpi-card">
                 <div class="kpi-icon">👥</div>
                 <div class="kpi-label">Clientes</div>
-                <div class="kpi-value">—</div>
+                <div class="kpi-value">{{ $totalClientes }}</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-icon">📦</div>
                 <div class="kpi-label">Pedidos Ativos</div>
-                <div class="kpi-value">—</div>
+                <div class="kpi-value">{{ $pedidosAtivos }}</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-icon">🏷️</div>
-                <div class="kpi-label">Itens em Estoque</div>
-                <div class="kpi-value">—</div>
+                <div class="kpi-label">Estoque Total</div>
+                <div class="kpi-value">{{ number_format($totalEstoque, 0, ',', '.') }}</div>
             </div>
             <div class="kpi-card">
                 <div class="kpi-icon">🤝</div>
                 <div class="kpi-label">Fornecedores</div>
-                <div class="kpi-value">—</div>
+                <div class="kpi-value">{{ $totalFornecedores }}</div>
             </div>
         </div>
 
@@ -229,23 +215,34 @@
         <div class="dash-card mb-8">
             <div class="section-title">Acesso Rápido</div>
             <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(180px,1fr)); gap: 0.75rem;">
-                <a href="#" class="nav-shortcut"><span class="shortcut-icon">👤</span> Clientes</a>
-                <a href="#" class="nav-shortcut"><span class="shortcut-icon">📋</span> Pedidos</a>
-                <a href="#" class="nav-shortcut"><span class="shortcut-icon">📦</span> Estoque</a>
-                <a href="#" class="nav-shortcut"><span class="shortcut-icon">🏭</span> Fornecedores</a>
-                <a href="#" class="nav-shortcut"><span class="shortcut-icon">📊</span> Relatórios</a>
+                <a href="{{ route('clientes.index') }}" class="nav-shortcut"><span class="shortcut-icon">👤</span> Clientes</a>
+                <a href="{{ route('pedidos.index') }}" class="nav-shortcut"><span class="shortcut-icon">📋</span> Pedidos</a>
+                <a href="{{ route('estoque.index') }}" class="nav-shortcut"><span class="shortcut-icon">📦</span> Estoque</a>
+                <a href="{{ route('fornecedores.index') }}" class="nav-shortcut"><span class="shortcut-icon">🏭</span> Fornecedores</a>
             </div>
         </div>
 
         {{-- Status do Sistema --}}
         <div class="dash-card">
-            <div class="section-title">Status do Sistema</div>
-            <p style="font-size:0.88rem; color:var(--mid);">
-                <span class="status-dot status-ok"></span> Sistema operando normalmente
-                &nbsp;&nbsp;
-                <span class="status-dot status-alert"></span> Itens com estoque baixo — verifique o módulo de estoque
-            </p>
+            <div class="section-title">Status Operacional</div>
+            <div style="font-size:0.88rem; color:var(--mid);">
+                <p class="mb-2">
+                    <span class="status-dot status-ok"></span> 
+                    Servidor online e banco de dados conectado.
+                </p>
+                
+                @if($estoqueBaixo)
+                <p>
+                    <span class="status-dot status-alert"></span> 
+                    <strong>Atenção:</strong> Existem itens com estoque abaixo do mínimo permitido!
+                </p>
+                @else
+                <p>
+                    <span class="status-dot status-ok"></span> 
+                    Níveis de estoque dentro da normalidade.
+                </p>
+                @endif
+            </div>
         </div>
-
     </div>
 </x-app-layout>

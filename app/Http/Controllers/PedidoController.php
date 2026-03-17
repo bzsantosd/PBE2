@@ -8,8 +8,9 @@ use Illuminate\Http\Request;
 
 class PedidoController extends Controller
 {
-    public function index() {
-        $pedidos = Pedidos::all();
+    public function index()
+    {
+        $pedidos = Pedidos::with('cliente')->get(); // O 'with' carrega o relacionamento
         return view('pedido.index', compact('pedidos'));
     }
 

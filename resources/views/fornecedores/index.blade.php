@@ -208,11 +208,12 @@
                                         Editar
                                     </a>
 
-                                    <form action="{{ route('fornecedores.destroy', $fornecedor->id) }}" method="POST" onsubmit="return confirm('Excluir este fornecedor permanentemente?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-delete">Excluir</button>
-                                    </form>
+                                    {{-- Chamada do Modal Genérico --}}
+                                    <button type="button" 
+                                            class="btn-delete" 
+                                            onclick="openDeleteModal('{{ route('fornecedores.destroy', $fornecedor->id) }}', '{{ $fornecedor->nome_fantasia }}')">
+                                        Excluir
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -230,6 +231,8 @@
                 </tbody>
             </table>
         </div>
-
     </div>
+
+    {{-- Componente Modal --}}
+    <x-modal-delete />
 </x-app-layout>

@@ -7,6 +7,7 @@ use App\Http\Controllers\FornecedorController;
 use App\Http\Controllers\EstoqueController;
 use App\Http\Controllers\ProdutoController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\DashboardController;
 
 
 Route::resource('clientes', ClienteController::class);
@@ -34,9 +35,11 @@ Route::post('/estoque', [EstoqueController::class, 'store'])->name('estoque.stor
 Route::get('/produtos', [ProdutoController::class, 'index'])->name('produtos.index')->middleware(['auth']);
 Route::get('/produtos/create', [ProdutoController::class, 'create'])->name('produtos.create');
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+
+
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

@@ -187,7 +187,6 @@
                             </td>
                             <td>
                                 @php
-                                    // Mapeamento compatível com o <select> do create.blade.php
                                     $statusClass = match($pedido->status) {
                                         'Pendente' => 'status-pendente',
                                         'Em Produção' => 'status-producao',
@@ -204,11 +203,12 @@
                                 <div class="action-btns">
                                     <a href="{{ route('pedidos.edit', $pedido->id) }}" class="btn-edit">Editar</a>
                                     
-                                    <form action="{{ route('pedidos.destroy', $pedido->id) }}" method="POST" onsubmit="return confirm('Excluir este pedido permanentemente?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-delete">Excluir</button>
-                                    </form>
+                                    {{-- Botão configurado para o Modal Genérico --}}
+                                    <button type="button" 
+                                            class="btn-delete" 
+                                            onclick="openDeleteModal('{{ route('pedidos.destroy', $pedido->id) }}', 'Pedido #{{ $pedido->numero_pedido }}')">
+                                        Excluir
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -227,4 +227,7 @@
             </table>
         </div>
     </div>
+
+    {{-- Componente Modal --}}
+    <x-modal-delete />
 </x-app-layout>

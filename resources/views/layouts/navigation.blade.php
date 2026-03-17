@@ -204,7 +204,7 @@
             {{-- Logo + Links --}}
             <div class="flex items-center gap-10">
                 <a href="{{ route('dashboard') }}" style="text-decoration:none;">
-                    <span class="nav-logo-text">Confecção<span class="nav-logo-dot"></span></span>
+                    <span class="nav-logo-text">Studio Confecção<span class="nav-logo-dot"></span></span>
                 </a>
 
                 <div class="hidden sm:flex items-center gap-6" style="height: 60px;">

@@ -211,11 +211,12 @@
                                 <div class="action-cell">
                                     <a href="{{ route('produtos.edit', $produto->id) }}" class="btn-edit">Editar</a>
                                     
-                                    <form action="{{ route('produtos.destroy', $produto->id) }}" method="POST" onsubmit="return confirm('Deseja realmente excluir este registro?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button type="submit" class="btn-delete">Excluir</button>
-                                    </form>
+                                    {{-- Botão configurado para o Modal Genérico --}}
+                                    <button type="button" 
+                                            class="btn-delete" 
+                                            onclick="openDeleteModal('{{ route('produtos.destroy', $produto->id) }}', '{{ $produto->nome_fantasia }}')">
+                                        Excluir
+                                    </button>
                                 </div>
                             </td>
                         </tr>
@@ -233,6 +234,8 @@
                 </tbody>
             </table>
         </div>
-
     </div>
+
+    {{-- Componente Modal --}}
+    <x-modal-delete />
 </x-app-layout>

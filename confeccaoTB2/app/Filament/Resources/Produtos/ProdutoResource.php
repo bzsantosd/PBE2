@@ -22,6 +22,7 @@ use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 
 
+
 class ProdutoResource extends Resource
 {
     protected static ?string $model = Produto::class;
@@ -78,13 +79,7 @@ class ProdutoResource extends Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            //
-        ];
-    }
-
+  
     public static function getPages(): array
     {
         return [

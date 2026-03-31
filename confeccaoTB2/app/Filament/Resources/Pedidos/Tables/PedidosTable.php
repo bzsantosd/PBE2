@@ -35,9 +35,9 @@ class PedidosTable
             ->filters([
                 //
             ])
-            ->recordActions([
-                ViewAction::make(),
-                EditAction::make(),
+           ->recordActions([
+                ViewAction::make()->label('Visualizar'),
+                EditAction::make()->label('Editar'),
             ])
             ->toolbarActions([
                 BulkActionGroup::make([

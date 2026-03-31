@@ -20,6 +20,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use Filament\Forms\Form;
 
 class EstoqueResource extends Resource
 {
@@ -31,28 +32,32 @@ class EstoqueResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        // return EstoqueForm::configure($schema);return $schema
-        return $schema
-                ->schema([
-                    Select::make('produto_id')
-                        ->relationship('produto', 'nome') // Assume que o model Produto tem a coluna 'nome'
-                        ->required()
-                        ->searchable()
-                        ->preload(),
+    
+{
+   return $schema
+        ->schema([
+            // Relacionamento com o Model Produto
+            Select::make('produto_id')
+                ->relationship('produto', 'nome') // 'produto' é o método no Model, 'nome' é a coluna que será exibida
+                ->label('Produto')
+                ->required()
+                ->searchable()
+                ->preload(),
 
-                    TextInput::make('quantidade')
-                        ->numeric()
-                        ->default(0)
-                        ->required()
-                        ->label('Quantidade em Estoque'),
+            TextInput::make('quantidade')
+                ->label('Quantidade em Estoque')
+                ->numeric()
+                ->default(0)
+                ->required(),
 
-                    TextInput::make('localizacao')
-                        ->label('Localização / Prateleira')
-                        ->placeholder('Ex: Corredor A, Prateleira 2')
-                        ->maxLength(255),
-                ])->columns(2);
-       
+            TextInput::make('localizacao')
+                ->label('Localização / Prateleira')
+                ->placeholder('Ex: Corredor A, Prateleira 2')
+                ->maxLength(255),
+        ])
+        ->columns(2);
 }
+    }
 
     public static function infolist(Schema $schema): Schema
     {

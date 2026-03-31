@@ -20,12 +20,22 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
+use UnitEnum;
 
 class FornecedorResource extends Resource
 {
     protected static ?string $model = Fornecedor::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static ?string $navigationLabel = 'Fornecedor';
+
+    protected static ?string $modelLabel = 'Fornecedor';
+
+    protected static ?string $pluralModelLabel = 'Fornecedores';
+
+    protected static string|UnitEnum|null $navigationGroup = 'Administração';
+
 
     protected static ?string $recordTitleAttribute = 'Fornecedores';
 

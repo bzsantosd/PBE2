@@ -11,6 +11,7 @@ use App\Filament\Resources\Clientes\Schemas\ClienteInfolist;
 use App\Filament\Resources\Clientes\Tables\ClientesTable;
 use App\Models\Cliente;
 use BackedEnum;
+use UnitEnum;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Support\RawJs;
@@ -25,10 +26,11 @@ class ClienteResource extends Resource
 {
     protected static ?string $model = Cliente::class;
 
+      protected static ?int $navigationSort = 2;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static ?string $recordTitleAttribute = 'Clientes';
-
+protected static string|UnitEnum|null $navigationGroup = 'Cadastros Gerais';
     public static function form(Schema $schema): Schema
     {
         // return ClienteForm::configure($schema);

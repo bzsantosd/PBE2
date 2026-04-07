@@ -9,8 +9,10 @@ use App\Filament\Resources\Permissions\Pages\ViewPermission;
 use App\Filament\Resources\Permissions\Schemas\PermissionForm;
 use App\Filament\Resources\Permissions\Schemas\PermissionInfolist;
 use App\Filament\Resources\Permissions\Tables\PermissionsTable;
-use App\Models\Permission;
+// use App\Models\Permission;
+use Spatie\Permission\Models\Permission;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -20,13 +22,39 @@ class PermissionResource extends Resource
 {
     protected static ?string $model = Permission::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static ?int $navigationSort = 1;
+
+   protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-rectangle-stack';
+
+    protected static ?string $navigationLabel = 'Painel Permissões';
+
+    protected static ?string $modelLabel = 'Criar Permissão';
+
+    protected static ?string $pluralModelLabel = 'Permissões';
+
+  
+   protected static string|UnitEnum|null $navigationGroup = 'Administração';
 
     protected static ?string $recordTitleAttribute = 'Permissões';
 
     public static function form(Schema $schema): Schema
     {
-        return PermissionForm::configure($schema);
+        // return PermissionForm::configure($schema);
+        return $schema
+        ->schema([
+            \Filament\Forms\Components\TextInput::make('name')
+            ->label('Nome da Permissão')
+            ->required()
+            ->unique(ignoreRecord:true)
+            ->maxLength(255)
+            ->columnSpanFull(),
+
+            \Filament\Forms\Components\TextInput::make('guard_name')
+            ->label('Nivel da Permissão')
+            ->required()
+            ->maxLength(20)
+            ->columnSpanFull(),
+        ]);
     }
 
     public static function infolist(Schema $schema): Schema
@@ -36,7 +64,28 @@ class PermissionResource extends Resource
 
     public static function table(Table $table): Table
     {
-        return PermissionsTable::configure($table);
+        // return PermissionsTable::configure($table);
+        return $table
+        ->columns([
+            \Filament\Tables\Columns\TextColumn::make('name')
+            ->label('Nome da Permissão')
+            ->searchable()
+            ->sortable(),
+
+            \Filament\Tables\Columns\TextColumn::make('guard_name')
+            ->label('Nivel da Permissão')
+            ->searchable(),
+
+            \Filament\Tables\Columns\TextColumn::make('created_at')
+            ->label('Criada em')
+            ->dateTime('d/m/Y')
+            ->sortable(),
+        ])
+
+        ->recordActions([
+             \Filament\Actions\EditAction::make(),
+              \Filament\Actions\ViewAction::make(),
+        ]);
     }
 
     public static function getRelations(): array

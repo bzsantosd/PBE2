@@ -11,6 +11,7 @@ use App\Filament\Resources\Estoques\Schemas\EstoqueInfolist;
 use App\Filament\Resources\Estoques\Tables\EstoquesTable;
 use App\Models\Estoque;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -26,7 +27,9 @@ class EstoqueResource extends Resource
 {
     protected static ?string $model = Estoque::class;
 
+      protected static ?int $navigationSort = 3;
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+    protected static string|UnitEnum|null $navigationGroup = 'Estoque';
 
     protected static ?string $recordTitleAttribute = 'Estoques';
 

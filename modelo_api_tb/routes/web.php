@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\usuario;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Http\Request;
@@ -10,7 +11,7 @@ Route::get('/', function () {
 });
 
 
-Route::get('user/{id}', function ($id) {
+Route::get('usuario/{id}', function ($id) {
    
     $response = Http::get("https://dummyjson.com/user/{$id}");
 
@@ -49,4 +50,41 @@ Route::post('usuario/novo', function(Request $request) {
         'id_gerado' => rand(1000, 9999),
         'dados_recebidos' => $dados
     ], 201);
+});
+
+
+Route::post('user', function(Request $request) {
+    $dados = $request->validate([
+        'nome' => 'required|string|min:2',
+        'email'     => 'required|email'
+    ]);
+
+    $usuario = usuario::create([
+        'nome' => $dados['nome'],
+        'email' => $dados['email'],
+    ]);
+
+    return response()->json([
+        'mensagem' => 'Usuário cadastrado com sucesso!',
+        'id_gerado' => rand(1000, 9999),
+        'dados_recebidos' => $usuario
+    ], 201);
+});
+
+Route::get('user', function () {
+    $usuarios = usuario::all();
+
+    return response()->json([
+            'status' => 'Usuarios buscados!',
+            'resultado' => $usuarios
+        ], 200);
+});
+
+Route::get('user/{id}', function ($id) {
+    $usuario = usuario::find($id);
+
+    return response()->json([
+            'status' => 'Usuarios buscados!',
+            'resultado' => $usuario
+        ], 200);
 });

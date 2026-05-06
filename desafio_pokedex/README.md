@@ -1,10 +1,25 @@
 # Pokédex Edition 🦖
 
-Este projeto em uma gestão completa de dados via **Banco de Dados (MySQL)**, eliminando a dependência de APIs externas. A aplicação permite visualizar Pokémon lendários pré-definidos e gerir um CRUD completo de criações personalizadas com upload de imagens.
+Este projeto consiste numa gestão completa de dados via **Banco de Dados (MySQL)**, eliminando a dependência de APIs externas. A aplicação permite visualizar Pokémon lendários pré-definidos e gerir um CRUD completo de criações personalizadas com upload de imagens.
 
 ---
 
-## Tecnologias Utilizadas
+## Sobre o Universo
+
+O sistema já vem populado com três entidades lendárias únicas, cada uma com a sua própria história e mecânicas de combate:
+
+* **🌑 Umbrarex:**
+    O terror dos estrategistas pela sua natureza reativa e furtiva. Ele funde-se à sombra do adversário para observar o seu comportamento e, ao emergir, replica os ataques do inimigo com força sombria amplificada, agindo como um espelho psicológico.
+
+* **⚓ Aquavant:**
+    Mestre das artes marciais subaquáticas que treina nas correntes mais fortes do oceano. Consegue endurecer a água ao redor dos punhos, criando lâminas cortantes. Utiliza danças de combate para gerar redemoinhos e proteger o seu território.
+
+* **🕳️ Riftor:**
+    Uma anomalia que desafia as leis do espaço. Move-se instantaneamente através de fendas roxas na realidade, tornando-se intocável ao desaparecer no momento do impacto. Habita ruínas antigas e coleciona relíquias de outras dimensões.
+
+---
+
+## 🛠️ Tecnologias Utilizadas
 
 * **Framework:** Laravel 11
 * **Linguagem:** PHP 8.2+
@@ -19,7 +34,7 @@ Este projeto em uma gestão completa de dados via **Banco de Dados (MySQL)**, el
 * **`app/Http/Controllers/PokemonController.php`**: Contém a lógica de controlo (listagem, criação, edição e exclusão).
 * **`app/Models/Pokemon.php`**: Classe que representa a tabela de Pokémons (`$fillable`).
 * **`database/migrations/`**: Define a estrutura da tabela no MySQL (nome, tipo, ataque, foto, descrição).
-* **`database/seeders/PokemonFixoSeeder.php`**: Script para popular o banco com os 3 Pokémon Lendários iniciais.
+* **`database/seeders/PokemonFixoSeeder.php`**: Script para popular o banco com os 3 Pokémon Lendários iniciais (Umbrarex, Aquavant e Riftor).
 * **`resources/views/`**:
     * `pokedex.blade.php`: Interface principal e galeria de cards.
     * `edit.blade.php`: Formulário para edição de dados.
@@ -60,9 +75,9 @@ Siga os passos abaixo para configurar o projeto localmente:
 3.  **Configurar o Ambiente (.env):**
     Copie o ficheiro `.env.example` para `.env` e ajuste as credenciais do MySQL:
     ```env
-    DB_DATABASE=laravel
-    DB_USERNAME=root
-    DB_PASSWORD=SenaiSP
+    DB_DATABASE=nome_da_sua_base
+    DB_USERNAME=seu_usuario
+    DB_PASSWORD=sua_senha
     ```
 
 4.  **Preparar o Banco de Dados (Migrations + Seeders):**
@@ -85,5 +100,5 @@ Siga os passos abaixo para configurar o projeto localmente:
 
 ## 📝 Notas 
 
-* **Diferenciação de Registos**: Foi utilizado um campo booleano `is_fixo` no banco para separar conteúdo do sistema de conteúdo do utilizador.
+* **Diferenciação de Registos**: Foi utilizado um campo booleano `is_fixo` no banco para separar o conteúdo lendário (estático) do conteúdo criado pelo utilizador.
 * **Segurança**: Validação de formulários no Controller para garantir que apenas imagens válidas sejam enviadas e campos obrigatórios sejam preenchidos.

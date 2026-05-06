@@ -4,90 +4,125 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Pokemon;
-
+use Illuminate\Support\Facades\File;
 
 class PokemonController extends Controller
 {
     /**
-     * Esta é a função que carrega a página principal.
-     * É aqui que passamos as duas variáveis para a View.
+     * Lista todos os Pokémon na página principal.
      */
     public function index()
     {
-        // 1. Buscamos no banco apenas os que marcamos como fixos (no Seeder)
+        // Busca os 3 lendários (is_fixo = 1)
         $lendarios = Pokemon::where('is_fixo', true)->get();
 
-        // 2. Buscamos os que o usuário cadastrou (onde is_fixo é falso)
-        // Usamos o orderBy para o mais novo aparecer primeiro
+        // Busca as criações do usuário (is_fixo = 0)
         $cadastrados = Pokemon::where('is_fixo', false)->orderBy('id', 'desc')->get();
 
-        // 3. Enviamos essas duas variáveis para o arquivo 'pokedex.blade.php'
         return view('pokedex', compact('lendarios', 'cadastrados'));
     }
 
     /**
-     * Esta função salva o novo Pokémon que você cadastrar via formulário
+     * Salva um novo Pokémon no banco de dados e a imagem em public/img.
      */
-    public function store(Request $request) {
-    $pokemon = new Pokemon();
-    $pokemon->nome = $request->nome;
-    $pokemon->tipo = $request->tipo;
-    $pokemon->ataque = $request->ataque;
-    $pokemon->descricao = $request->descricao;
+    public function store(Request $request)
+    {
+        $request->validate([
+            'nome'      => 'required|string|max:255',
+            'tipo'      => 'required|string|max:255',
+            'ataque'    => 'required|integer',
+            'descricao' => 'required|string',
+            'foto'      => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
 
-    if($request->hasFile('foto')) {
-        $imgName = time() . '.' . $request->foto->extension();
-        // Isso move o arquivo para public/img
-        $request->foto->move(public_path('img'), $imgName);
-        $pokemon->foto = $imgName;
+        $caminhoFoto = null;
+
+        if ($request->hasFile('foto')) {
+            $file = $request->file('foto');
+            // Gera um nome único com timestamp para evitar substituição
+            $nomeArquivo = time() . '_' . $file->getClientOriginalName();
+            
+            // Move o arquivo para a pasta public/img
+            $file->move(public_path('img'), $nomeArquivo);
+            
+            // Salva o caminho relativo que será usado pelo helper asset()
+            $caminhoFoto = 'img/' . $nomeArquivo;
+        }
+
+        Pokemon::create([
+            'nome'      => $request->nome,
+            'tipo'      => $request->tipo,
+            'ataque'    => $request->ataque,
+            'descricao' => $request->descricao,
+            'foto'      => $caminhoFoto,
+            'is_fixo'   => false,
+        ]);
+
+        return redirect()->route('pokedex')->with('sucesso', 'Pokémon cadastrado com sucesso!');
     }
 
-    $pokemon->save();
-    return back()->with('sucesso', 'Pokémon cadastrado!');
-}
-
-
+    /**
+     * Abre a tela de edição.
+     */
     public function edit($id)
-{
-    $pokemon = Pokemon::findOrFail($id);
-    return view('edit', compact('pokemon'));
-}
+    {
+        $pokemon = Pokemon::findOrFail($id);
+        return view('edit', compact('pokemon'));
+    }
 
+    /**
+     * Atualiza os dados no banco de dados.
+     */
     public function update(Request $request, $id)
 {
     $pokemon = Pokemon::findOrFail($id);
 
     $request->validate([
-        'nome' => 'required',
-        'tipo' => 'required',
-        'ataque' => 'required|integer',
-        'descricao' => 'required',
-        'foto' => 'image|nullable|max:2048'
+        'nome'      => 'required|string|max:255',
+        'tipo'      => 'required|string|max:255',
+        'ataque'    => 'required|integer',
+        'descricao' => 'required|string',
+        'foto'      => 'nullable|image|max:2048',
     ]);
 
-    $data = $request->all();
+    // Pegamos todos os dados, EXCETO a foto por enquanto
+    $dados = $request->except('foto');
 
     if ($request->hasFile('foto')) {
-        $data['foto'] = $request->file('foto')->store('pokemons', 'public');
+        // 1. Deleta a foto antiga se ela existir (e não for lendário)
+        if ($pokemon->foto && File::exists(public_path($pokemon->foto)) && !$pokemon->is_fixo) {
+            File::delete(public_path($pokemon->foto));
+        }
+
+        // 2. Sobe a foto nova
+        $file = $request->file('foto');
+        $nomeArquivo = time() . '_' . $file->getClientOriginalName();
+        $file->move(public_path('img'), $nomeArquivo);
+        
+        // 3. Adiciona o novo caminho ao array de dados para salvar
+        $dados['foto'] = 'img/' . $nomeArquivo;
     }
 
-    $pokemon->update($data);
+    // Atualiza o banco de dados
+    $pokemon->update($dados);
 
-    return redirect('/')->with('sucesso', 'Pokémon atualizado com sucesso!');
+    return redirect()->route('pokedex')->with('sucesso', 'Pokémon atualizado com sucesso!');
 }
 
+    /**
+     * Exclui o Pokémon e remove o arquivo de imagem.
+     */
+    public function destroy($id)
+    {
+        $pokemon = Pokemon::findOrFail($id);
 
-public function destroy($id)
-{
-    $pokemon = Pokemon::findOrFail($id);
-    
-    // Opcional: Deletar a foto do storage para não ocupar espaço
-    if ($pokemon->foto && !str_starts_with($pokemon->foto, 'img/')) {
-        \Illuminate\Support\Facades\Storage::disk('public')->delete($pokemon->foto);
+        // Deleta o arquivo físico da pasta public/img (apenas se não for fixo)
+        if ($pokemon->foto && File::exists(public_path($pokemon->foto)) && !$pokemon->is_fixo) {
+            File::delete(public_path($pokemon->foto));
+        }
+
+        $pokemon->delete();
+
+        return redirect()->route('pokedex')->with('sucesso', 'Pokémon excluído com sucesso!');
     }
-
-    $pokemon->delete();
-
-    return redirect('/')->with('sucesso', 'Pokémon excluído com sucesso!');
-}
 }

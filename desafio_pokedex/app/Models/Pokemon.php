@@ -23,3 +23,4 @@ class Pokemon extends Model
         'is_fixo'
     ];
 }
+

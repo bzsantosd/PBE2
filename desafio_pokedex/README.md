@@ -1,58 +1,89 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Pokédex Edition 🦖
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este projeto em uma gestão completa de dados via **Banco de Dados (MySQL)**, eliminando a dependência de APIs externas. A aplicação permite visualizar Pokémon lendários pré-definidos e gerir um CRUD completo de criações personalizadas com upload de imagens.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Tecnologias Utilizadas
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+* **Framework:** Laravel 11
+* **Linguagem:** PHP 8.2+
+* **Banco de Dados:** MySQL
+* **Frontend:** Tailwind CSS (via CDN)
+* **Ícones/Fontes:** Font Awesome & Google Fonts
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 🏗️ Arquitetura e 📂 Estrutura de Pastas
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+* **`app/Http/Controllers/PokemonController.php`**: Contém a lógica de controlo (listagem, criação, edição e exclusão).
+* **`app/Models/Pokemon.php`**: Classe que representa a tabela de Pokémons (`$fillable`).
+* **`database/migrations/`**: Define a estrutura da tabela no MySQL (nome, tipo, ataque, foto, descrição).
+* **`database/seeders/PokemonFixoSeeder.php`**: Script para popular o banco com os 3 Pokémon Lendários iniciais.
+* **`resources/views/`**:
+    * `pokedex.blade.php`: Interface principal e galeria de cards.
+    * `edit.blade.php`: Formulário para edição de dados.
+    * `welcome.blade.php`: Página inicial padrão.
+* **`routes/web.php`**: Definição das rotas (URLs) do sistema.
+* **`public/img/`**: Armazenamento de fotos estáticas e imagens enviadas pelos utilizadores.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+---
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+## 🚀 Funcionalidades Implementadas
 
-## Agentic Development
+### 🔹 Gestão de Dados (CRUD)
+* **Create (Criar)**: Cadastro de Pokémon com nome, tipo, ataque, descrição e anexo de foto.
+* **Read (Ler)**: Exibição de duas listas: **Lendários (Fixos)** e **Minhas Criações (Dinâmicos)**.
+* **Update (Atualizar)**: Edição completa de informações e substituição de imagem.
+* **Delete (Excluir)**: Remoção de registos com alerta de confirmação e limpeza de ficheiros.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+### 🔹 Tratamento de Imagens
+Utilização do **Storage Link** do Laravel para garantir que os uploads sejam armazenados de forma organizada e fiquem acessíveis publicamente através de URLs seguras.
 
-```bash
-composer require laravel/boost --dev
+---
 
-php artisan boost:install
-```
+## ⚙️ Como Instalar e Rodar
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+Siga os passos abaixo para configurar o projeto localmente:
 
-## Contributing
+1.  **Clonar o repositório:**
+    ```bash
+    git clone <url-do-repositorio>
+    cd pokedex-edition
+    ```
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+2.  **Instalar as dependências:**
+    ```bash
+    composer install
+    ```
 
-## Code of Conduct
+3.  **Configurar o Ambiente (.env):**
+    Copie o ficheiro `.env.example` para `.env` e ajuste as credenciais do MySQL:
+    ```env
+    DB_DATABASE=laravel
+    DB_USERNAME=root
+    DB_PASSWORD=SenaiSP
+    ```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+4.  **Preparar o Banco de Dados (Migrations + Seeders):**
+    ```bash
+    php artisan migrate:fresh --seed
+    ```
 
-## Security Vulnerabilities
+5.  **Criar Link de Armazenamento:**
+    ```bash
+    php artisan storage:link
+    ```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+6.  **Iniciar o Servidor:**
+    ```bash
+    php artisan serve
+    ```
+    Aceda a: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-## License
+---
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## 📝 Notas 
+
+* **Diferenciação de Registos**: Foi utilizado um campo booleano `is_fixo` no banco para separar conteúdo do sistema de conteúdo do utilizador.
+* **Segurança**: Validação de formulários no Controller para garantir que apenas imagens válidas sejam enviadas e campos obrigatórios sejam preenchidos.

@@ -7,14 +7,14 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Roboto', sans-serif; background-color: #f3f4f6; }
+        body { font-family: 'Roboto', sans-serif; background-color: #DADADA; }
     </style>
 </head>
 <body class="py-10 px-4">
 
     <div class="max-w-6xl mx-auto">
         <h1 class="text-5xl font-black text-center text-red-600 mb-12 uppercase tracking-tighter">
-            Pokédex Master Edition
+            Pokédex Edition
         </h1>
 
         <section class="mb-16">
@@ -86,7 +86,7 @@
                         
                         <div class="h-48 overflow-hidden bg-gray-200 flex items-center justify-center">
                             @if($p->foto)
-                                <img src="{{ asset('storage/' . $p->foto) }}" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500 p-2">
+                                <img src="{{ asset($p->foto) }}" class="w-full h-full object-contain group-hover:scale-110 transition-transform duration-500 p-2">
                             @else
                                 <span class="text-gray-400 text-xs font-bold uppercase">Sem Foto</span>
                             @endif
